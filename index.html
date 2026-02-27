@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>我的第一个网站</title>
+    <!-- 链接外部 CSS 文件，便于维护公共样式 -->
+    <link rel="stylesheet" type="text/css" href="start.css">
+    <!-- 内联样式或动画可直接写在 style 标签中，这里添加了标题淡入动画 -->
+    <style>
+        /* 标题淡入动画效果 */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        h1 {
+            animation: fadeIn 2s ease-in-out;
+        }
+        /* 简单调整图片样式：圆形、限定宽度 */
+        .profile-photo {
+            width: 150px;
+            border-radius: 50%;  /* 圆形裁剪 */
+            display: block;
+            margin-bottom: 10px;
+        }
+        /* 导航栏样式可后续在 start.css 中完善，此处仅作示例 */
+        nav ul {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            gap: 20px;
+            background-color: #f0f0f0;
+            padding: 10px;
+        }
+        nav a {
+            text-decoration: none;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <!-- 页面导航区域，便于用户快速跳转 -->
+    <nav>
+        <ul>
+            <li><a href="#home">首页</a></li>
+            <li><a href="#favorites">我的最爱</a></li>
+            <li><a href="#about">关于我</a></li>
+        </ul>
+    </nav>
+
+    <!-- 主内容容器，与外部 CSS 中的 .content 类对应（原拼写错误已修正） -->
+    <div class="content">
+        <header id="home">
+            <h1>欢迎来到我的网站</h1>
+        </header>
+
+        <main>
+            <!-- “我的最爱”区块，可根据需要补充内容 -->
+            <section id="favorites">
+                <h2>我的最爱</h2>
+                <!-- 这里可以添加列表、图片等内容，预留结构 -->
+            </section>
+
+            <!-- “关于我”区块，包含自我介绍和个人照片 -->
+            <section id="about">
+                <h3>关于我</h3>
+                <!-- 个人照片：src 替换为实际照片路径，alt 属性提升可访问性 -->
+                <img src="your-photo.jpg" alt="黄同学的个人照片" class="profile-photo">
+                <p>我的名字是 Huang，是一名华中科技大学的学生。</p>
+            </section>
+        </main>
+    </div>
+</body>
+</html>
