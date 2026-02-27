@@ -2,72 +2,706 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>我的第一个网站</title>
-    <!-- 链接外部 CSS 文件，便于维护公共样式 -->
-    <link rel="stylesheet" type="text/css" href="start.css">
-    <!-- 内联样式或动画可直接写在 style 标签中，这里添加了标题淡入动画 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>黄同学 · 游戏化实验场</title>
+    <!-- Font Awesome 6 (免费图标库) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* 标题淡入动画效果 */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        /* ===== 全局设计令牌 ===== */
+        :root {
+            --bg-start: #37333f;
+            --bg-end: #6a6675;
+            --bg-extra: #4a4453;
+            --text-light: #ffffff;
+            --gold: #ffd700;
+            --gold-glow: rgba(255, 215, 0, 0.3);
+            --card-bg: rgba(255, 255, 255, 0.08);
+            --nav-bg: rgba(0, 0, 0, 0.25);
+            --border-light: rgba(255, 255, 255, 0.1);
+            --shadow-dark: rgba(0, 0, 0, 0.25);
+            --font-main: 'Arial', 'Helvetica', sans-serif;
+            --dark-bg: #1e1c24;      /* 深色文字/背景 */
+            --darker-bg: #2e2a35;    /* 更深色背景 */
         }
-        h1 {
-            animation: fadeIn 2s ease-in-out;
+
+        /* ===== 重置 & 基础 ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        /* 简单调整图片样式：圆形、限定宽度 */
-        .profile-photo {
-            width: 150px;
-            border-radius: 50%;  /* 圆形裁剪 */
-            display: block;
-            margin-bottom: 10px;
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 80px;   /* 防止导航遮挡锚点 */
         }
-        /* 导航栏样式可后续在 start.css 中完善，此处仅作示例 */
+
+        body {
+            font-family: var(--font-main);
+            line-height: 1.6;
+            min-height: 100vh;
+            background: linear-gradient(-45deg, var(--bg-start), var(--bg-end), var(--bg-extra), #2e2a35);
+            background-size: 400% 400%;
+            animation: gradientFlow 18s ease infinite;
+            color: var(--text-light);
+        }
+
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* ===== 主内容容器 ===== */
+        .content {
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            backdrop-filter: blur(2px);
+        }
+
+        /* ===== 导航栏 ===== */
+        nav {
+            position: sticky;
+            top: 20px;
+            z-index: 100;
+            margin: 20px auto;
+            width: fit-content;
+        }
+
         nav ul {
             list-style: none;
-            padding: 0;
             display: flex;
             gap: 20px;
-            background-color: #f0f0f0;
-            padding: 10px;
+            background-color: var(--nav-bg);
+            padding: 12px 28px;
+            border-radius: 60px;
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-light);
+            box-shadow: 0 10px 25px var(--shadow-dark);
         }
+
         nav a {
             text-decoration: none;
-            color: #333;
+            color: var(--text-light);
+            font-weight: 600;
+            padding: 6px 14px;
+            border-radius: 40px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 1.05rem;
+        }
+
+        nav a i {
+            font-size: 1.1em;
+        }
+
+        nav a:hover {
+            color: var(--gold);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        nav a.active {
+            color: var(--gold);
+            background: rgba(255, 215, 0, 0.18);
+            box-shadow: 0 0 18px var(--gold-glow);
+        }
+
+        /* ===== 标题 + 打字机 ===== */
+        #home {
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 3.2rem;
+            margin-bottom: 10px;
+            text-shadow: 0 0 25px var(--gold-glow);
+            letter-spacing: 1px;
+            animation: fadeIn 1.4s ease;
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(-25px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .typewriter {
+            font-size: 1.8rem;
+            min-height: 3.5rem;
+            margin-bottom: 30px;
+            color: var(--gold);
+            border-right: 3px solid var(--gold);
+            display: inline-block;
+            white-space: nowrap;
+            overflow: hidden;
+            animation: blinkCursor 0.75s step-end infinite;
+            font-weight: 400;
+            max-width: 90vw;
+        }
+
+        @keyframes blinkCursor {
+            0%, 100% { border-color: transparent; }
+            50% { border-color: var(--gold); }
+        }
+
+        /* ===== 通用区块 ===== */
+        section {
+            width: 100%;
+            max-width: 1100px;
+            margin: 70px auto;
+            padding: 40px 35px;
+            background: var(--card-bg);
+            backdrop-filter: blur(14px);
+            border-radius: 40px;
+            border: 1px solid var(--border-light);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            transform: translateY(35px);
+            transition: opacity 0.7s cubic-bezier(0.2, 0.9, 0.3, 1), transform 0.7s ease;
+            scroll-margin-top: 80px;
+        }
+
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        h2 {
+            font-size: 2.4rem;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+            color: white;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+
+        h3 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #f5f5f5;
+        }
+
+        /* ===== 我的最爱区块 ===== */
+        #favorites p {
+            margin-top: 5px;
+        }
+        #favorites ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 25px;
+        }
+        #favorites ul li {
+            margin: 12px 0;
+            font-size: 1.3rem;
+        }
+        #favorites i {
+            color: var(--gold);
+        }
+
+        /* ===== 个人照片 ===== */
+        .profile-photo {
+            width: 170px;
+            height: 170px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4);
+            transition: transform 0.4s, border-color 0.3s;
+            margin: 25px auto;
+        }
+
+        .profile-photo:hover {
+            transform: scale(1.05) rotate(2deg);
+            border-color: var(--gold);
+        }
+
+        /* ===== 技能标签（可点击链接） ===== */
+        .skills-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 30px;
+        }
+
+        .skill-item {
+            background: rgba(20, 20, 30, 0.4);
+            backdrop-filter: blur(6px);
+            padding: 12px 28px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            border: 1px solid var(--gold-glow);
+            transition: all 0.3s;
+            cursor: pointer;                 /* 改为指针，表示可点击 */
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+            text-decoration: none;           /* 去除下划线 */
+            color: inherit;                  /* 继承白色文字 */
+        }
+
+        .skill-item i {
+            color: var(--gold);
+            font-size: 1.2em;
+        }
+
+        .skill-item:hover {
+            background: var(--gold);
+            color: var(--dark-bg);
+            transform: translateY(-6px);
+            box-shadow: 0 14px 24px rgba(255, 215, 0, 0.4);
+        }
+
+        .skill-item:hover i {
+            color: var(--dark-bg);
+        }
+
+        /* ===== 项目卡片 ===== */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 28px;
+            margin-top: 35px;
+        }
+
+        .project-card {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            padding: 28px 22px;
+            border-radius: 28px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px) scale(1.01);
+            border-color: var(--gold);
+            box-shadow: 0 25px 35px rgba(255, 215, 0, 0.2);
+        }
+
+        .project-card i {
+            font-size: 2.8rem;
+            color: var(--gold);
+            margin-bottom: 20px;
+        }
+
+        .project-card h4 {
+            font-size: 1.7rem;
+            margin-bottom: 12px;
+        }
+
+        .project-card p {
+            font-size: 1rem;
+            margin-bottom: 20px;
+            opacity: 0.9;
+            flex: 1;
+        }
+
+        .project-link {
+            color: var(--gold);
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: gap 0.3s;
+            margin-top: 8px;
+        }
+
+        .project-link:hover {
+            gap: 12px;
+        }
+
+        /* ===== 游戏卡片专属样式 ===== */
+        .game-btn {
+            background: var(--gold);
+            border: none;
+            color: var(--darker-bg);
+            padding: 10px 22px;
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 6px 14px rgba(255, 215, 0, 0.4);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid rgba(255,255,240,0.5);
+        }
+
+        .game-btn:hover {
+            transform: scale(1.06);
+            background: #fff3b0;
+            color: var(--dark-bg);
+        }
+
+        .game-btn:active {
+            transform: scale(0.96);
+        }
+
+        #coinMessage {
+            min-height: 24px;
+            font-style: italic;
+            color: #ffecaa;
+            margin-top: 12px;
+        }
+
+        .coin-display {
+            font-size: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin: 10px 0;
+        }
+
+        .coin-display i {
+            font-size: 2rem;
+            margin: 0;
+        }
+
+        /* ===== 关于我区块 ===== */
+        #about i.fa-map-marker-alt {
+            margin-right: 6px;
+            color: var(--gold);
+        }
+
+        /* ===== 页脚 ===== */
+        footer {
+            margin-top: 100px;
+            padding: 45px 20px;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(14px);
+            width: 100%;
+            text-align: center;
+            border-top: 1px solid rgba(255, 215, 0, 0.25);
+            font-size: 1.1rem;
+        }
+
+        .social-links {
+            margin: 25px 0 10px;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+        }
+
+        .social-links a {
+            color: white;
+            font-size: 2.2rem;
+            transition: all 0.3s;
+        }
+
+        .social-links a:hover {
+            color: var(--gold);
+            transform: translateY(-7px);
+        }
+
+        /* ===== 返回顶部按钮 ===== */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--gold);
+            color: var(--darker-bg);
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.7rem;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.25s;
+            border: none;
+            box-shadow: 0 8px 18px rgba(255, 215, 0, 0.5);
+            z-index: 99;
+        }
+
+        .back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            transform: scale(1.1);
+            background: #fff5c4;
+        }
+
+        /* ===== 响应式微调 ===== */
+        @media (max-width: 650px) {
+            h1 { font-size: 2.4rem; }
+            .typewriter { 
+                font-size: 1.2rem; 
+                white-space: normal; 
+                border-right: none; 
+                animation: none; 
+            }
+            nav ul { gap: 8px; padding: 10px 14px; flex-wrap: wrap; justify-content: center; }
+            nav a { font-size: 0.9rem; padding: 5px 8px; }
+            section { padding: 30px 18px; }
+            h2 { font-size: 2rem; }
+            .projects-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
-    <!-- 页面导航区域，便于用户快速跳转 -->
+    <!-- 导航栏 -->
     <nav>
         <ul>
-            <li><a href="#home">首页</a></li>
-            <li><a href="#favorites">我的最爱</a></li>
-            <li><a href="#about">关于我</a></li>
+            <li><a href="#home" class="nav-link"><i class="fas fa-home"></i>首页</a></li>
+            <li><a href="#favorites" class="nav-link"><i class="fas fa-heart"></i>我的最爱</a></li>
+            <li><a href="#skills" class="nav-link"><i class="fas fa-code"></i>技能</a></li>
+            <li><a href="#projects" class="nav-link"><i class="fas fa-flask"></i>实验</a></li>
+            <li><a href="#about" class="nav-link"><i class="fas fa-user"></i>关于</a></li>
         </ul>
     </nav>
 
-    <!-- 主内容容器，与外部 CSS 中的 .content 类对应（原拼写错误已修正） -->
     <div class="content">
         <header id="home">
-            <h1>欢迎来到我的网站</h1>
+            <h1>⚡ 黄同学的实验场 ⚡</h1>
+            <div id="typewriter" class="typewriter"></div>
         </header>
 
         <main>
-            <!-- “我的最爱”区块，可根据需要补充内容 -->
+            <!-- 我的最爱 -->
             <section id="favorites">
                 <h2>我的最爱</h2>
-                <!-- 这里可以添加列表、图片等内容，预留结构 -->
+                <p>🌟 电影 · 书籍 · 美食 🌟</p>
+                <ul>
+                    <li><i class="fas fa-film"></i> 《盗梦空间》《星际穿越》</li>
+                    <li><i class="fas fa-book"></i> 《三体》《人类简史》《基督山伯爵》</li>
+                    <li><i class="fas fa-utensils"></i> 火锅、小笼包</li>
+                </ul>
             </section>
 
-            <!-- “关于我”区块，包含自我介绍和个人照片 -->
+            <!-- 技能标签（可点击跳转菜鸟教程） -->
+            <section id="skills">
+                <h2>🧪 技能标签</h2>
+                <div class="skills-grid">
+                    <a href="https://www.runoob.com/html/html5-intro.html" target="_blank" class="skill-item"><i class="fab fa-html5"></i> HTML5</a>
+                    <a href="https://www.runoob.com/css3/css3-tutorial.html" target="_blank" class="skill-item"><i class="fab fa-css3-alt"></i> CSS3</a>
+                    <a href="https://www.runoob.com/js/js-tutorial.html" target="_blank" class="skill-item"><i class="fab fa-js"></i> JavaScript</a>
+                    <a href="https://www.runoob.com/python3/python3-tutorial.html" target="_blank" class="skill-item"><i class="fab fa-python"></i> Python</a>
+                    <a href="https://www.runoob.com/sql/sql-tutorial.html" target="_blank" class="skill-item"><i class="fas fa-database"></i> SQL</a>
+                    <a href="https://www.runoob.com/git/git-tutorial.html" target="_blank" class="skill-item"><i class="fab fa-git-alt"></i> Git</a>
+                    <a href="https://www.runoob.com/figma/figma-tutorial.html" target="_blank" class="skill-item"><i class="fas fa-paint-brush"></i> Figma</a>
+                </div>
+            </section>
+
+            <!-- 实验作品 -->
+            <section id="projects">
+                <h2>🔬 实验作品</h2>
+                <div class="projects-grid">
+                    <!-- 动态颜色生成器 -->
+                    <div class="project-card">
+                        <i class="fas fa-palette"></i>
+                        <h4>动态颜色生成器</h4>
+                        <p>用 JS 生成随机渐变背景，并可复制色值的小工具。</p>
+                        <a href="#" class="project-link">查看演示 <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                    <!-- 天气小部件 -->
+                    <div class="project-card">
+                        <i class="fas fa-cloud-sun"></i>
+                        <h4>天气小部件</h4>
+                        <p>调用免费 API 显示实时天气，带动态图标。</p>
+                        <a href="#" class="project-link">查看演示 <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                    <!-- 游戏卡片: 金币收藏家 -->
+                    <div class="project-card">
+                        <i class="fas fa-gamepad"></i>
+                        <h4>金币收藏家</h4>
+                        <p>点击收集金币，测试你的手速！</p>
+                        <div class="coin-display">
+                            <span id="coinCount">0</span> <i class="fas fa-coins" style="color: #ffd700;"></i>
+                        </div>
+                        <div style="display: flex; justify-content: center;">
+                            <button id="coinButton" class="game-btn"><i class="fas fa-hand-pointer"></i> +1 金币</button>
+                        </div>
+                        <p id="coinMessage"></p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 关于我 -->
             <section id="about">
                 <h3>关于我</h3>
-                <!-- 个人照片：src 替换为实际照片路径，alt 属性提升可访问性 -->
-                <img src="your-photo.jpg" alt="黄同学的个人照片" class="profile-photo">
-                <p>我的名字是 Huang，是一名华中科技大学的学生。</p>
+                <img src="my/my1.jpg" alt="黄同学的个人照片" class="profile-photo" onerror="this.src='https://via.placeholder.com/170x170?text=Huang'">
+                <p>我的名字是 黄沁铄，一名南通的自由程序员。</p>
+                <p><i class="fas fa-map-marker-alt"></i> 江苏南通</p>
+                <p style="margin-top: 25px;">🚀 永远对新技术保持好奇，喜欢折腾各种有趣的小项目。</p>
             </section>
         </main>
     </div>
+
+    <!-- 页脚 -->
+    <footer>
+        <p>© 2026 黄同学 · 保持好奇，持续实验</p>
+        <div class="social-links">
+            <a href="#" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
+            <a href="#" target="_blank" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+            <a href="#" target="_blank" aria-label="Email"><i class="fas fa-envelope"></i></a>
+        </div>
+    </footer>
+
+    <!-- 返回顶部按钮 -->
+    <div class="back-to-top" id="backToTop"><i class="fas fa-chevron-up"></i></div>
+
+    <script>
+        (function() {
+            // ---------- 打字机效果 ----------
+            const typewriterEl = document.getElementById('typewriter');
+            if (typewriterEl) {
+                const phrases = [
+                    '自由程序员 · 游戏化实验',
+                    '喜欢折腾CSS和JS',
+                    '南通 · 美食探索者',
+                    '正在构建数字花园',
+                    '点击金币试试看 ⬇️'
+                ];
+                let phraseIndex = 0;
+                let charIndex = 0;
+                let isDeleting = false;
+                let currentText = '';
+
+                function type() {
+                    const fullText = phrases[phraseIndex];
+                    if (isDeleting) {
+                        currentText = fullText.substring(0, charIndex - 1);
+                        charIndex--;
+                    } else {
+                        currentText = fullText.substring(0, charIndex + 1);
+                        charIndex++;
+                    }
+
+                    typewriterEl.textContent = currentText;
+
+                    if (!isDeleting && charIndex === fullText.length) {
+                        isDeleting = true;
+                        setTimeout(type, 2200);
+                    } else if (isDeleting && charIndex === 0) {
+                        isDeleting = false;
+                        phraseIndex = (phraseIndex + 1) % phrases.length;
+                        setTimeout(type, 400);
+                    } else {
+                        const speed = isDeleting ? 40 : 90;
+                        setTimeout(type, speed);
+                    }
+                }
+                type();
+            }
+
+            // ---------- 元素收集 ----------
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-link');
+            const backToTop = document.getElementById('backToTop');
+            const homeLink = document.querySelector('a[href="#home"]');
+
+            // ---------- Intersection Observer (添加visible类和高亮) ----------
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        const id = entry.target.getAttribute('id');
+                        navLinks.forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href') === '#' + id) {
+                                link.classList.add('active');
+                            }
+                        });
+                    }
+                });
+            }, { threshold: 0.3 });
+
+            sections.forEach(section => observer.observe(section));
+
+            // ---------- 滚动逻辑：返回按钮 + 首页高亮 ----------
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 300) {
+                    backToTop.classList.add('show');
+                } else {
+                    backToTop.classList.remove('show');
+                }
+
+                if (window.scrollY < 120) {
+                    navLinks.forEach(link => link.classList.remove('active'));
+                    if (homeLink) homeLink.classList.add('active');
+                }
+            });
+
+            // 返回顶部
+            backToTop.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+
+            // 初始可见性检查
+            setTimeout(() => {
+                sections.forEach(section => {
+                    const rect = section.getBoundingClientRect();
+                    if (rect.top < window.innerHeight * 0.6) {
+                        section.classList.add('visible');
+                    }
+                });
+                if (window.scrollY < 120 && homeLink) {
+                    navLinks.forEach(link => link.classList.remove('active'));
+                    homeLink.classList.add('active');
+                }
+            }, 150);
+
+            // ---------- 游戏卡片逻辑 ----------
+            const coinBtn = document.getElementById('coinButton');
+            if (coinBtn) {
+                const coinCountSpan = document.getElementById('coinCount');
+                const coinMsg = document.getElementById('coinMessage');
+                let count = 0;
+
+                coinBtn.addEventListener('click', function() {
+                    count++;
+                    coinCountSpan.textContent = count;
+
+                    if (count === 1) {
+                        coinMsg.textContent = '🥇 第一枚金币！';
+                    } else if (count === 5) {
+                        coinMsg.textContent = '🎯 已经5枚了，继续！';
+                    } else if (count === 10) {
+                        coinMsg.textContent = '🎉 10枚！ 你获得“新手收藏家”称号';
+                    } else if (count === 20) {
+                        coinMsg.textContent = '🏆 20枚！ 手速可以啊';
+                    } else if (count === 30) {
+                        coinMsg.textContent = '💎 30枚！ 传说中的金币猎手';
+                    } else if (count === 50) {
+                        coinMsg.textContent = '🔥 50枚！ 你已经超越实验员';
+                    } else if (count > 50 && count % 10 === 0) {
+                        coinMsg.textContent = `✨ ${count}枚金币！ 离财富自由不远了`;
+                    } else {
+                        const funMessages = ['再来一币', '叮!', '继续收集', '金币+1', '手速不错'];
+                        if (count < 10 && count % 2 === 0) {
+                            coinMsg.textContent = funMessages[Math.floor(Math.random() * funMessages.length)];
+                        }
+                    }
+                });
+            }
+
+            // 阻止空链接跳转（演示用）
+            document.querySelectorAll('.project-link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    alert('演示模式：感谢体验！实际项目会在这里展示。');
+                });
+            });
+        })();
+    </script>
 </body>
 </html>
